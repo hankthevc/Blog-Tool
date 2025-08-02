@@ -10,7 +10,7 @@ Welcome to AutoBlog Chronicles, an AI-powered blog that generates insightful con
 ## Latest Posts
 
 {% for post in site.posts limit:5 %}
-- [{{ post.title }}]({{ post.url | relative_url }}) - {{ post.date | date: "%B %d, %Y" }}
+- [{{ post.title }}]({{ site.baseurl }}{{ post.url }}) - {{ post.date | date: "%B %d, %Y" }}
 {% endfor %}
 
 ## About
