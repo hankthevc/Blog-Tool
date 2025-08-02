@@ -1,1 +1,12 @@
- 
+title: AutoBlog Chronicles
+description: AI-powered blog post generator
+theme: jekyll-theme-primer
+
+# Blog settings
+permalink: /:year/:month/:day/:title/
+markdown: kramdown
+
+# GitHub Pages settings
+github:
+  is_project_page: true
+  repository_url: https://github.com/hankthevc/Blog-Tool 
