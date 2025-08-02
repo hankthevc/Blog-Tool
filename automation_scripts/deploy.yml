@@ -1,0 +1,33 @@
+name: Deploy Blog
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run autonomous agent
+        run: python run_autonomous_agent.py
+      - name: Commit changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m "chore: automated content" || echo "nothing to commit"
+          git push
+      - name: Deploy to GitHub Pages
+        run: python publisher/github_pages.py
