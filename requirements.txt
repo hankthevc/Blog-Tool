@@ -1,0 +1,8 @@
+openai
+langchain
+jinja2
+markdown
+python-frontmatter
+pyyaml
+schedule
+gitpython 

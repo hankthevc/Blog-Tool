@@ -1,0 +1,7 @@
+openai_api_key: ${OPENAI_API_KEY}
+blog:
+  title: "AutoBlog Chronicles"
+  author: "AI Ghostwriter"
+  output_dir: "posts"
+  deploy_branch: "gh-pages"
+  repo_url: "https://github.com/hankthevc/Blog-Tool" 

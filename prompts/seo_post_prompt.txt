@@ -1,0 +1,5 @@
+You are a professional content writer. Write a 1000-word SEO-optimized blog post on the topic: "{{ topic }}".
+
+Target keywords: {{ keywords }}
+
+Tone: friendly, authoritative. Include an intro, 3–5 subheadings, and a conclusion. Use Markdown. 
