@@ -4,11 +4,11 @@ An AI-powered blog post generator and publisher that automatically creates and p
 
 ## Features
 
-- Automated blog post generation using OpenAI GPT-4
+- Automated niche discovery using Google Trends and GPT
+- Daily content generation with image selection
+- SEO optimisation and monetisation injection
+- Monthly performance reports
 - GitHub Pages integration for automatic publishing
-- Scheduled post generation (daily by default)
-- SEO-optimized content with keyword targeting
-- Markdown-based content with frontmatter
 
 ## Setup
 
@@ -42,34 +42,30 @@ export OPENAI_API_KEY='your-api-key-here'
 
 ## Usage
 
-### Generate a Single Post
+### Run the Autonomous Agent
+
+Run all automation (niche detection, content creation, reporting):
 
 ```bash
-python main.py
-```
-
-### Run the Automated Scheduler
-
-```bash
-python scheduler.py
-```
-
-By default, this will generate a new post every day at 9:00 AM.
-
-### Manual Publishing
-
-To manually publish posts to GitHub Pages:
-
-```bash
-python publisher/github_pages.py
+python run_autonomous_agent.py
 ```
 
 ## Configuration
 
-The `config.yaml` file contains all the necessary settings:
+The `config.yaml` file controls API keys and scheduling:
 
 ```yaml
-openai_api_key: ${OPENAI_API_KEY}
+openai_api_key: "your_openai_api_key"
+mixtral_model_path: "/local/path/to/mixtral/model"
+niche_detection_frequency_days: 7
+content_generation_frequency_days: 1
+analytics_provider: "plausible"
+adsense_id: "your_google_adsense_id"
+amazon_affiliate_tag: "your_affiliate_tag"
+notification_channel: "email"
+notification_api_key: "your_notification_api_key"
+auto_revision_interval_days: 30
+backup_frequency_days: 7
 blog:
   title: "AutoBlog Chronicles"
   author: "AI Ghostwriter"
