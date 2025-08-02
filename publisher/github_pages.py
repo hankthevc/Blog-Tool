@@ -14,12 +14,20 @@ class GitHubPagesPublisher:
 
     def _ensure_deploy_branch(self):
         """Ensure the deployment branch exists"""
-        if self.deploy_branch not in [ref.name for ref in self.repo.refs]:
+        try:
+            # Try to check out the existing branch
+            self.repo.git.checkout(self.deploy_branch)
+            # Switch back to main
+            self.repo.git.checkout('main')
+        except:
+            # Branch doesn't exist, create it as an orphan branch
             current = self.repo.active_branch
-            new_branch = self.repo.create_head(self.deploy_branch)
-            new_branch.checkout()
-            # Create empty gh-pages branch
-            self.repo.index.commit("Initialize gh-pages branch")
+            self.repo.git.checkout('--orphan', self.deploy_branch)
+            # Remove all files from the index
+            self.repo.git.rm('-rf', '.')
+            # Create initial commit
+            self.repo.git.commit('--allow-empty', '-m', "Initialize gh-pages branch")
+            # Switch back to original branch
             current.checkout()
 
     def publish(self):
@@ -41,17 +49,28 @@ class GitHubPagesPublisher:
                     elif os.path.isdir(item):
                         shutil.rmtree(item)
             
-            # Copy posts directory
-            posts_dir = self.config['blog']['output_dir']
-            if os.path.exists(posts_dir):
-                shutil.copytree(posts_dir, f"./{posts_dir}", dirs_exist_ok=True)
+            # Copy Jekyll files
+            files_to_copy = [
+                '_config.yml',
+                'index.md',
+                '_layouts',
+                self.config['blog']['output_dir']
+            ]
+            
+            for item in files_to_copy:
+                if os.path.exists(item):
+                    if os.path.isfile(item):
+                        shutil.copy2(item, '.')
+                    else:
+                        shutil.copytree(item, f"./{os.path.basename(item)}", dirs_exist_ok=True)
             
             # Add and commit changes
             self.repo.git.add(all=True)
-            self.repo.index.commit(f"Update blog posts - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            commit_message = f"Update blog posts - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            self.repo.index.commit(commit_message)
             
-            # Push to remote
-            self.repo.git.push('origin', self.deploy_branch, force=True)
+            # Force push to remote
+            self.repo.git.push('origin', self.deploy_branch, '--force')
             
             print(f"✅ Successfully published to GitHub Pages")
             

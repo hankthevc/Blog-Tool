@@ -6,5 +6,6 @@ python-frontmatter
 pyyaml
 schedule
 gitpython
-pytrends
-
+flask
+apscheduler
+gunicorn 

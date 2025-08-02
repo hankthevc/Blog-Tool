@@ -13,15 +13,20 @@ def generate_and_save_post(topic, keywords):
     # Generate content
     content = generate_blog_post(topic, keywords)
 
-    # Render markdown
-    env = jinja2.Environment()
-    template = env.from_string(open("templates/blog_post_template.md").read())
-    md_output = template.render(
-        title=topic,
-        date=str(date.today()),
-        author=config['blog']['author'],
-        content=content
-    )
+    # Prepare Jekyll frontmatter
+    frontmatter = {
+        'layout': 'default',
+        'title': topic,
+        'date': date.today().strftime('%Y-%m-%d'),
+        'author': config['blog']['author'],
+        'keywords': keywords.split(',')
+    }
+
+    # Format post with frontmatter
+    post_content = "---\n"
+    post_content += yaml.dump(frontmatter, default_flow_style=False)
+    post_content += "---\n\n"
+    post_content += content
 
     # Save to file
     os.makedirs(config['blog']['output_dir'], exist_ok=True)
@@ -30,7 +35,7 @@ def generate_and_save_post(topic, keywords):
         f"{date.today()}-{topic.replace(' ', '-').lower()}.md"
     )
     with open(output_path, "w") as f:
-        f.write(md_output)
+        f.write(post_content)
 
     print(f"✅ Blog post saved to {output_path}")
     return output_path
